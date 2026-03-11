@@ -1,4 +1,5 @@
 #include "ScalarConverter.hpp"
+#include <algorithm>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
@@ -7,23 +8,39 @@
 #include <limits>
 #include <sstream>
 
-bool	check_is_int(std::string literal)
+bool	is_digit(char c)
 {
-	if (literal.find_first_not_of("0123456789") != std::string::npos)
+	if (c >= '0' && c <= '9')
 		return (true);
 	return (false);
+}
+
+bool	check_is_int(std::string literal)
+{
+	return (!(literal.length() > 1 && literal.find_first_not_of("0123456789") != std::string::npos));
+}
+
+bool	check_is_double(std::string literal)
+{
+	if (literal[0] == '.')
+		return (false);
+	if (std::count(literal.begin(), literal.end(), '.') != 1)
+		return (false);
+	if (literal.find_first_not_of("0123456789.") != std::string::npos)
+		return (false);
+	return (true);
+}
+
+bool	check_is_float(std::string literal)
+{
+	if (std::count(literal.begin(), literal.end(), '.') != 1)
+		return (false);
+	return (literal[literal.length() - 1] == 'f' && is_digit(literal[literal.length() - 2]));
 }
 
 bool	is_print(char c)
 {
 	if (c >= ' ' && c <= '~')
-		return (true);
-	return (false);
-}
-
-bool	is_digit(char c)
-{
-	if (c >= '0' && c <= '9')
 		return (true);
 	return (false);
 }
@@ -34,16 +51,6 @@ bool	is_int_lmt(double num)
 		return (true);
 	return (false);
 }
-
-// bool	is_double_lmt(double num)
-// {
-// 	const double	min_val = std::numeric_limits<double>::min();
-// 	const double	max_val = std::numeric_limits<double>::max();
-
-// 	if (num >= min_val && num <= max_val)
-// 		return (true);
-// 	return (false);
-// }
 
 void	print_pseudo(std::string pseudo)
 {
@@ -64,14 +71,30 @@ void	print_pseudo(std::string pseudo)
 	std::cout << "double: " << pseudo << std::endl;
 }
 
+double	parse_input(std::string literal)
+{
+	double	valid = false;
+
+	if (check_is_int(literal))
+		valid = true;
+	else if (check_is_float(literal))
+	 	valid = true;
+	else if (check_is_double(literal))
+		valid = true;
+	return (valid);
+}
+
 void ScalarConverter::convert(std::string literal)
 {
 	int		int_val;
 	float	float_val;
 	double	double_val;
 
-	if (literal.length() > 1 && check_is_int(literal))
+	if (!parse_input(literal))
+	{
+		std::cout << "malformed input" << std::endl;
 		return ;
+	}
 
 	if (literal.compare("nan") == 0 || literal.compare("nanf") == 0 
 		|| literal.compare("-inf") == 0 || literal.compare("-inff") == 0
@@ -117,7 +140,6 @@ void ScalarConverter::convert(std::string literal)
 	std::cout << std::endl;
 	std::cout << std::fixed << std::setprecision(1);
 
-
 	std::cout << "float: "; 
 	double freal = std::strtod(literal.c_str(), NULL);
 	if (std::isinf(freal))
@@ -132,7 +154,5 @@ void ScalarConverter::convert(std::string literal)
 	    std::cout << "impossible";
 	else
 		std::cout << double_val;
-	std::cout << std::endl;
-	
 	std::cout << std::endl;
 }
