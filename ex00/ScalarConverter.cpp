@@ -84,17 +84,43 @@ double	parse_input(std::string literal)
 	return (valid);
 }
 
+bool isNumber(const std::string &s)
+{
+	if (s.empty())
+        return false;
+
+    std::string tmp = s;
+
+    // handle float suffix
+    if (tmp[tmp.size() - 1] == 'f' || tmp[tmp.size() - 1] == 'F')
+    {
+        if (tmp.size() == 1)
+            return false;
+        tmp = tmp.substr(0, tmp.size() - 1);
+    }
+
+    char *end;
+    std::strtod(tmp.c_str(), &end);
+
+    return *end == '\0';
+}
+
 void ScalarConverter::convert(std::string literal)
 {
 	int		int_val;
 	float	float_val;
 	double	double_val;
 
+	/*
 	if (!parse_input(literal))
 	{
 		std::cout << "malformed input" << std::endl;
 		return ;
 	}
+	*/
+
+	if (!isNumber(literal))
+		return ;
 
 	if (literal.compare("nan") == 0 || literal.compare("nanf") == 0 
 		|| literal.compare("-inf") == 0 || literal.compare("-inff") == 0
@@ -126,7 +152,7 @@ void ScalarConverter::convert(std::string literal)
 	}
 
 	std::cout << "char: ";
-	if (is_print(int_val))
+	if (int_val >= 0 && int_val <= 127 && is_print(int_val))
 		std::cout << '\'' << (char)int_val << '\'';
 	else
 		std::cout << "Non displayable";
