@@ -58,7 +58,7 @@ void	print_pseudo(std::string pseudo)
 
 	std::cout << "char: impossible" << std::endl;
 	std::cout << "int: impossible" << std::endl;
-	if (pseudo.length() == 4)
+	if (pseudo.length() == 4 || pseudo.compare("nan") == 0)
 	{
 		tmp = pseudo;
 		tmp += 'f';
@@ -71,37 +71,20 @@ void	print_pseudo(std::string pseudo)
 	std::cout << "double: " << pseudo << std::endl;
 }
 
-double	parse_input(std::string literal)
-{
-	double	valid = false;
-
-	if (check_is_int(literal))
-		valid = true;
-	else if (check_is_float(literal))
-	 	valid = true;
-	else if (check_is_double(literal))
-		valid = true;
-	return (valid);
-}
-
-bool isNumber(const std::string &s)
+bool isValidNumber(const std::string &s)
 {
 	if (s.empty())
         return false;
 
     std::string tmp = s;
-
-    // handle float suffix
     if (tmp[tmp.size() - 1] == 'f' || tmp[tmp.size() - 1] == 'F')
     {
         if (tmp.size() == 1)
             return false;
         tmp = tmp.substr(0, tmp.size() - 1);
     }
-
     char *end;
     std::strtod(tmp.c_str(), &end);
-
     return *end == '\0';
 }
 
@@ -110,17 +93,6 @@ void ScalarConverter::convert(std::string literal)
 	int		int_val;
 	float	float_val;
 	double	double_val;
-
-	/*
-	if (!parse_input(literal))
-	{
-		std::cout << "malformed input" << std::endl;
-		return ;
-	}
-	*/
-
-	if (!isNumber(literal))
-		return ;
 
 	if (literal.compare("nan") == 0 || literal.compare("nanf") == 0 
 		|| literal.compare("-inf") == 0 || literal.compare("-inff") == 0
@@ -141,7 +113,7 @@ void ScalarConverter::convert(std::string literal)
 		float_val = static_cast<float>(int_val);
 		double_val = static_cast<double>(int_val);
 	}
-	else
+	else if (isValidNumber(literal))
 	{
 		std::stringstream ss(literal);
 		ss >> int_val;
@@ -149,6 +121,11 @@ void ScalarConverter::convert(std::string literal)
 		sf >> float_val;
 		std::stringstream sd(literal);
 		sd >> double_val;
+	}
+	else
+	{
+		std::cout << "malformed input" << std::endl;
+		return ;
 	}
 
 	std::cout << "char: ";
