@@ -1,12 +1,5 @@
-#include <string>
 #include <stdint.h>
-
-typedef struct Data
-{
-	int			id;
-	std::string	name;
-
-} Data;
+#include "Data.hpp"
 
 class Serializer
 {
