@@ -43,7 +43,7 @@ void	Func::identify(Base& p)
 		A &a = dynamic_cast<A&>(p);
 		(void)a;
 		std::cout << "A" << std::endl;
-	} catch (std::bad_cast&) {
+	} catch (std::exception&) {
 		try {
 			B &b = dynamic_cast<B&>(p);
 			(void)b;

@@ -130,7 +130,7 @@ void ScalarConverter::convert(std::string literal)
 
 	std::cout << "char: ";
 	if (int_val >= 0 && int_val <= 127 && is_print(int_val))
-		std::cout << '\'' << (char)int_val << '\'';
+		std::cout << '\'' << static_cast<char>(int_val) << '\'';
 	else
 		std::cout << "Non displayable";
 	std::cout << std::endl;
