@@ -39,6 +39,7 @@ void	Func::identify(Base* p)
 
 void	Func::identify(Base& p)
 {
+	/*
 	try {
 		A &a = dynamic_cast<A&>(p);
 		(void)a;
@@ -58,4 +59,22 @@ void	Func::identify(Base& p)
 			}
 		}
 	}
+*/
+try {
+        // Reference dynamic_cast: on failure, throws std::bad_cast
+        (void)dynamic_cast<A&>(p);
+        std::cout << "A\n";
+        return;
+    } catch (const std::bad_cast& b) { std::cout << b.what() << ": Could not A" << std::endl; } // catch by const reference
+    try {
+        (void)dynamic_cast<B&>(p);
+        std::cout << "B\n";
+        return;
+    } catch (const std::bad_cast& b) { std::cout << b.what() << ": Could not B" << std::endl; }
+    try {
+        (void)dynamic_cast<C&>(p);
+        std::cout << "C\n";
+        return;
+    } catch (const std::bad_cast& b) { std::cout << b.what() << ": Could not C" << std::endl ; }
+    std::cout << "Unknown type\n";
 }
