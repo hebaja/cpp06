@@ -58,7 +58,10 @@ void	print_pseudo(std::string pseudo)
 
 	std::cout << "char: impossible" << std::endl;
 	std::cout << "int: impossible" << std::endl;
-	if (pseudo.compare("nan") == 0)
+	if (pseudo.compare("nan") == 0 
+		|| pseudo.compare("inf") == 0
+		|| pseudo.compare("+inf") == 0
+		|| pseudo.compare("-inf") == 0)
 	{
 		tmp = pseudo;
 		tmp += 'f';
@@ -68,7 +71,7 @@ void	print_pseudo(std::string pseudo)
 		std::cout << "float: " << pseudo << std::endl;
 	if (pseudo.length() == 5)
 		pseudo.erase(4);
-	if (pseudo.compare("nanf") == 0)
+	else if (pseudo.compare("nanf") == 0 || pseudo.compare("inff") == 0)
 		pseudo.erase(3);
 	std::cout << "double: " << pseudo << std::endl;
 }
@@ -97,9 +100,9 @@ void ScalarConverter::convert(std::string literal)
 	double	double_val;
 
 	if (literal.compare("nan") == 0 || literal.compare("nanf") == 0 
-		|| literal.compare("inf") == 0 || literal.compare("-inf") == 0 
-		|| literal.compare("-inff") == 0 || literal.compare("+inf") == 0 
-		|| literal.compare("+inff") == 0)
+		|| literal.compare("inf") == 0 || literal.compare("+inf") == 0
+		|| literal.compare("-inf") == 0 || literal.compare("inff") == 0
+		|| literal.compare("+inff") == 0 || literal.compare("-inff") == 0)  
 	{
 		print_pseudo(literal);
 		return ;
