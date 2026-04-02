@@ -1,5 +1,4 @@
 #include "ScalarConverter.hpp"
-#include <algorithm>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
@@ -15,29 +14,6 @@ bool	is_digit(char c)
 	return (false);
 }
 
-bool	check_is_int(std::string literal)
-{
-	return (!(literal.length() > 1 && literal.find_first_not_of("0123456789") != std::string::npos));
-}
-
-bool	check_is_double(std::string literal)
-{
-	if (literal[0] == '.')
-		return (false);
-	if (std::count(literal.begin(), literal.end(), '.') != 1)
-		return (false);
-	if (literal.find_first_not_of("0123456789.") != std::string::npos)
-		return (false);
-	return (true);
-}
-
-bool	check_is_float(std::string literal)
-{
-	if (std::count(literal.begin(), literal.end(), '.') != 1)
-		return (false);
-	return (literal[literal.length() - 1] == 'f' && is_digit(literal[literal.length() - 2]));
-}
-
 bool	is_print(char c)
 {
 	if (c >= ' ' && c <= '~')
@@ -45,7 +21,7 @@ bool	is_print(char c)
 	return (false);
 }
 
-bool	is_int_lmt(double num)
+bool	is_int_limit(double num)
 {
 	if (num >= std::numeric_limits<int>::min() && num <= std::numeric_limits<int>::max())
 		return (true);
@@ -142,7 +118,7 @@ void ScalarConverter::convert(std::string literal)
 	std::cout << std::endl;
 
 	std::cout << "int: ";
-	if (is_int_lmt(double_val))
+	if (is_int_limit(double_val))
 		std::cout << int_val; 
 	else
 		std::cout << "impossible";
