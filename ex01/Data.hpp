@@ -2,7 +2,7 @@
 
 #include <string>
 
-typedef struct Data
+typedef struct s_data
 {
 	int			id;
 	std::string	name;
